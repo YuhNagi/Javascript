@@ -1,0 +1,193 @@
+XHTML： 严格的HTML语言标准
+DHTML： 动态网页技术的统称（html+css+js的统称）
+XML  ： 可扩展的标记语言（语法同html一样，但可自定义标签）
+
+BOM与DOM
+BOM：　浏览器对象模型
+　　专门操作浏览器窗口的API，如：窗口大小，位置，是否显示菜单栏等
+DOM： 文档对象模型
+
+Node是一切节点对象的父类型
+ Node的三个公共属性：
+   nodeType  标明节点类型的数值（常量） =》比如元素节点为1，文本返回3
+   nodeName  节点的名称 =》  专门用于判断获得的标签名
+1.如果是元素节点，返回大写标签名 2.如果是文本节点，因定返回#text
+   nodeValue  节点的值
+1.元素节点，返回null  2.文本节点，返回文本的内容
+
+   childNodes 获得当前节点对象下的所有子节点，是一个【动态集合】，意味着它本身不能存数据，每用一次都要重新遍历一次
+
+
+------------------------------------------------------------------------------------------
+核心DOM与HTML DOM的区别：
+
+核心DOM ：
+对象：Document,Node,   ElementNode,TextNode,AttributeNode，CommentNode,NodeList 
+
+
+核心DOM提供了统一的操作接口
+createElement
+appendChild
+setAttribute
+
+核心DOM创建新元素：
+var newNode=document.createElement("img")
+
+
+给元素添加属性：
+e.setAttribure(‘’，‘’)
+e.setAttribureNode(attr)
+
+
+适用场合：
+核心DOM适合操作节点，如创建，删除，查找等
+
+HTML DOM：
+对象：image,Table,Form,Input,Select...HTML标签对象化
+例： HTMLTableElement，HTMLSelectElement等...
+
+http://img10.wtoutiao.com/mmbiz/o4BsyvNl575eg1Emumk4HRPG120v5mq7jRVjVnF6T9ibtuemPKmoibjYtofA5KRiaC1ia7x9UibXcmXqCBvWiciaJt0BQ/0?wx_fmt=png
+注：TableCell：td；TableRow：tr
+
+
+HTML DOM提供了封装好的各种对象
+Image
+Select
+Option
+...
+
+
+HTML DOM创建新元素
+var newNode=new Image()；
+
+
+给元素添加属性：
+img.src='';
+img.id='';
+imd.title='';
+img.className=''
+img.style.display='';
+
+这是典型的HTML DOM方法，他将创建元素以及访问元素的属性这些方法都简化了，直接把属性当做是对象的属性，但是我们要注意img.className=''
+
+适用场合：
+HTML DOM适合操作属性，如读取或修改属性的值
+
+------------------------------------------------------------------------------------------
+
+DOM树6种关系/6种属性
+  父子： 4个 parentNode(只会取到元素节点，因为文本不能包含其他节点) childNodes(兄弟节点) firstChild  lastChild
+  兄弟： 2个 previousSibling  nextSibling
+------------------------------------------------------------------------------------------
+
+
+    节点树               元素树
+    parentNode          parentElementNode
+    childNodes          children
+    firstChild          firstElementChild
+    lastChild           lastElementChild
+    previousSibling     previousElementSibling
+
+  但是元素树除了children以外，IE8都不兼容
+DOM Level2： 
+1.深度优先遍历： NodeIterator（） 节点迭代器
+使用： a.创建 遍历API对象： 
+var iterator =document.createNodeIterator(开始的父节点对象，显示所有节点NodeFilter.SHOW_ALL/只显示元素节点NodeFilter.SHOW_ELEMENT,null,false);
+
+b. 用While循环，反复调用iterator.nextNode()方法
+强调： 1.只要nextNode()，就向下一个移动一次
+     2. iterator.previousNode()，后退一次
+
+
+2.自有遍历  TreeWalker
+ 用法同Nodeiterator，只是它可以跳节点
+
+
+querySelector() 方法
+  返回文档中匹配指定 CSS 选择器的一个元素,对于多个选择器，使用逗号隔开，返回一个匹配的元素。
+  但是它只能向下找，连同级都找不了。
+
+querySelectorAll() 
+  返回文档中匹配指定 CSS 选择器的所有的元素
+
+------------------------------------------------------------------------------------------
+innerHTML  VS textContent(IE8及以下不兼容)  VS innerText(不兼容FF)
+innerHTML:   它取的是文本的原文，还包括代码               比如取 <span>>></span> => <span>&lt&ly</span>
+textContent: 它取的则是翻译过后的除去标签的纯文本字符      比如取 <span>>></span> => >>
+iinnerText   它拿到的内容同TextContent，应该是低版本的FF不兼容，我在45.6.0下是可以输出的。
+------------------------------------------------------------------------------------------
+Select对象
+
+属性：
+  selectedIndex： 当前选中项的下标
+  document.createDocumentFragment()  创建文档碎片方法
+————创建多个标签时，因为每用appendChild一次，页面就要重新渲染（刷新）一次，所以这时可用文档碎片先保存起来再一次性appendChild
+   只要不是添加到HTML页面中，只在JS内部appendChild多次的话就没关系。
+
+   options:  获得当前select下所有options的集合
+
+方法：
+   add()方法： add(新option对象)，相当于appendChild
+   remove(index)方法： index为options的下标
+
+对象：
+   Option对象： 指代select下某一个option元素
+   创建： var newOpt=new Option(innerHTML,value);    即在创建对象同时设置对象的innerHTML和value属性.    
+   属性： index 获取当前option的下标位置，专用于删除
+        selected  可当布尔值用，若当前option被选中，则返回true,否则返回false。
+
+
+Form对象
+  查找： document.form[序号/name]
+  它属下的元素查找： document.form[序号/name].elements[序号/name]
+
+  焦点：  elem.focus()/blur();
+      document.activeElement  获取当前正在获得焦点的元素
+
+  事件： onsubmit() 在表单提交时自动触发，对整个表单进行验证
+  取消onsubmit事件： var ev=window.event || arguments[0];
+            非IE8： ev.preventDefault();
+            IE8:   ev.returnValue=false;
+
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+
+BOM
+定义：专门操作浏览器窗口的对象。（通俗点说，相当于相册的相框）
+
+1.打开新链接
+ a.在当前窗口打开，可后退
+  用window.open('url','_self'); 第一个为新链接地址，第二个为target值
+
+ b.在当前窗口打开，但不可后退
+  location.replace('新url');  用新的地址替换旧的地址，因此内存中始终只有一个url
+
+ c.在新窗口中打开，且可同时打开多个相同的url
+  window.open('url','_blank');  第二个参数其实可省略，因为默认就是在新窗口中打开
+
+ d.在新窗口中打开，但只能打开一个相同url
+  window.open('url','name');  此处的第二个参数为新窗口的name(!!注意不是“title”).
+    _self: （实际上是）为自动获得当前窗口的名称
+    _blank:（实际上是）创建一个新窗口，随机生成一个不重复的名称
+    或者其它自定义名称，即可实现第4种打开方式
+
+    注：窗口的名称只能有一个，因此当设置多个时，后面的会替换前面的。
+------------------------------------------------------------------------------------------
+2.调整窗口大小与定位
+  window.innerHeight/Width            文档显示宽高
+         outerHeight/Width            整个窗口宽高
+
+  screen.height/width                 桌面完整分辨率宽高
+  screen.availHeight/availWidth       除去任务栏后剩余分辨率的宽高
+
+  window.resizeTo(width,height);      
+         resizeBy(变化的width,..height);  
+
+位置：
+  1.左上角X坐标   window.screenLeft || window.screenX
+         y坐标   window.screenTop  || wondow.screenY
+
+  2.将窗口移动到指定坐标  window.moveTo(x,y);
+  
+  3.事件发生时鼠标相对于整个屏幕的坐标  event.screenX/screenY
