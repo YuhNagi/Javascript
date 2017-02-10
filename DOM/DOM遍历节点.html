@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>递归使用</title>
+	<link rel="stylesheet" href="bootstrap.min.css" />
+</head>
+
+<body>
+<div class="container">
+  <h1>Hello World!</h1>
+  <ul>
+    <li>英语</li>
+    <li>日语
+      <ul>递归使用场合：
+        <li>遍历不确定层级深度的树形结构时</li>
+        <li>不确定层级深度的多级管理结构</li>
+      </ul>
+    </li>
+    <li>汉语</li>
+  </ul>
+
+</div>
+<div></div>
+<script>
+window.onload=function(){
+
+/*
+典型利用递归计算n的阶乘的函数，一定要注意凑数n是否>1!!!!!!!!
+  var a=3;
+  console.log( add(a) );
+
+  function add(n){
+    // return n*(n-1);
+    return n>1?n*add(n-1):1;
+  }*/
+
+
+
+//-------------------------------------基本版--------------------------------
+  // getChildren(document.body.childNodes[1]);
+/*  getChildren(document);
+
+  function getChildren(parent){
+    //如果parent是元素节点，返回nodeName,否则返回nodeValue
+    // console.log( parent.nodeType==1?parent.nodeName:parent.nodeValue );
+    console.log( parent.nodeType==1?parent.nodeName:'这是个文本节点' );
+
+    //如果parent有子节点，就遍历parent的所有直接子节点，并输出当前子节点类型的子节点的nodeName或者nodeValue
+    if(parent.childNodes){
+       for(var i=0,len=parent.childNodes.length;i<len;i++){
+          // var child=parent.childNodes[i];
+          // console.log( child.nodeType==1?child.nodeName:'这是个文本节点' );
+          getChildren(parent.childNodes[i]);
+       }
+    }
+  }*/
+//--------------------------------------------------------------------------
+//-------------------------------------代码升级版--------------------------------
+
+
+/*  var blanks=[];  //用来保存当前节点的/t个数
+  getChildren(document);
+
+  function getChildren(parent){
+    console.log( blanks.join('') + '|-' + (parent.nodeType==1?parent.nodeName:'这是个文本节点') );
+
+    if(parent.childNodes){
+      // 只要有进入子节点，就加入一个/t，即缩进一格
+      blanks.push('/t');
+
+       for(var i=0,len=parent.childNodes.length;i<len;i++){
+          getChildren(parent.childNodes[i]);
+       }
+
+       // 一个循环结束，意味着一轮子节点循环结束，到平级节点应该退加一格,减掉一个/t
+       blanks.pop();
+    }
+  }*/
+
+
+//-------------------------------------只打印元素升级版--------------------------------
+ var blanks=[];  //用来保存当前节点的/t个数
+  getChildren(document);
+
+  function getChildren(parent){
+    console.log( blanks.join('') + '|-' + (children.nodeType==1?parent.nodeName:'这是个文本节点') );
+
+    if(children.childNodes){
+      // 只要有进入子节点，就加入一个/t，即缩进一格
+      blanks.push('/t');
+
+       for(var i=0,len=children.childNodes.length;i<len;i++){
+          getChildren(children.childNodes[i]);
+       }
+
+       // 一个循环结束，意味着一轮子节点循环结束，到平级节点应该退加一格,减掉一个/t
+       blanks.pop();
+    }
+  }
+
+
+
+
+};
+</script>
+</body>
+</html>
